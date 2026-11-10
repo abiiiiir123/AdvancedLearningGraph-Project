@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Semantic Search{% endblock %}
+{% block heading %}Semantic Job Search{% endblock %}
+{% block subtitle %}Your text is embedded with DistilBERT (mean pooling) and compared by cosine similarity with 15,000 stored job embeddings{% endblock %}
+{% block content %}
+<div class="grid g-side-l">
+  <div>
+    <div class="card">
+      <div class="card-head"><div><div class="t">Job description or skill profile</div><div class="d">Describe the role in your own words; exact keywords are not needed</div></div></div>
+      <label class="field" for="q">Query</label>
+      <textarea id="q" style="min-height:130px" placeholder="e.g. I build dashboards and KPI reports for business stakeholders"></textarea>
+      <div class="grid g-2 mt-s" style="gap:10px">
+        <div><label class="field" for="cat">Job category</label><select id="cat"><option value="">All categories</option></select></div>
+        <div><label class="field" for="k">Results</label><select id="k"><option>5</option><option selected>10</option><option>20</option><option>30</option></select></div>
+      </div>
+      <div class="field-row mt">
+        <button class="btn btn-primary" id="go">{{ icon('search') }} Find similar jobs</button>
+      </div>
+      <div class="chips mt-s" id="examples"></div>
+      <div id="msg" class="mt-s"></div>
+    </div>
+    <div class="card mt" id="where-card" style="display:none">
+      <div class="card-head"><div><div class="t">Where your query lands</div><div class="d">Query (red star) projected on the cluster map</div></div></div>
+      <div id="where-txt" class="note mb"></div>
+      <div id="mini"></div>
+    </div>
+    <div class="card mt">
+      <div class="card-head"><div><div class="t">About the similarity score</div></div></div>
+      <div class="note">DistilBERT is a <b>pre-trained language model, not a sentence-similarity model</b>: it was never trained to compare sentences.
+        The score is the cosine between <b>centered</b> mean-pooled embeddings (the corpus mean vector is subtracted to remove the shared component).
+        Read the scores as a <b>ranking</b> (higher = semantically closer), not as calibrated probabilities. Green chips are skills that appear in both your query and the ad.</div>
+    </div>
+  </div>
+  <div class="card flush" id="res-card">
+    <div class="card-head" style="padding:18px 22px 6px"><div><div class="t">Most similar job offers</div><div class="d" id="res-sub">Run a search to see results</div></div></div>
+    <div id="results">{{ '' }}<div class="empty">{{ icon('search') }}Results will appear here.</div></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/pages/semantic_search.js') }}"></script>{% endblock %}

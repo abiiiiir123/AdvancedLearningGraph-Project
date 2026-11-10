@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Analytics & Insights{% endblock %}
+{% block heading %}Analytics &amp; Insights{% endblock %}
+{% block subtitle %}Skill demand by category and by cluster, salaries, geography and model evaluation, all computed from the dataset and saved metrics{% endblock %}
+{% block content %}
+<div id="err"></div>
+<div class="grid g-2">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Most demanded technical skills</div><div class="d">Top 25 skills; filter by skill category</div></div>
+      <div class="right"><select id="skill-cat" style="width:auto;padding:6px 10px;font-size:12.5px"><option value="">All categories</option></select></div></div>
+    <div id="c-top" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Top skills for one job category</div><div class="d">Share of the category's postings listing each skill (top 15)</div></div>
+      <div class="right"><select id="job-sel" style="width:auto;padding:6px 10px;font-size:12.5px"></select></div></div>
+    <div id="c-job" class="loading"></div>
+  </div>
+</div>
+<div class="card mt">
+  <div class="card-head"><div><div class="t">Skills by job category</div><div class="d">% of each category's postings that list the skill (20 most frequent skills)</div></div></div>
+  <div id="c-heat" class="loading"></div>
+</div>
+<div class="grid g-2 mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Skills by cluster</div><div class="d">% of each K-Means cluster's ads listing the skill</div></div></div>
+    <div id="c-skcl" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Skill-category mix per job</div><div class="d">Share of all skill mentions falling in each skill category</div></div></div>
+    <div id="c-mix" class="loading"></div>
+  </div>
+</div>
+<div class="grid g-2 mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Advertised yearly salary by category</div><div class="d">Bar = 25th to 75th percentile, line = median (only the postings that publish a salary)</div></div></div>
+    <div id="c-sal" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Job category distribution</div><div class="d">Postings per category</div></div></div>
+    <div id="c-cat" class="loading"></div>
+  </div>
+</div>
+<div class="grid g-2 mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Number of job offers per cluster</div><div class="d">Size of each discovered professional family</div></div></div>
+    <div id="c-csize" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Model evaluation metrics</div><div class="d">Classification on the held-out test set (macro averages)</div></div></div>
+    <div id="c-metrics" class="loading"></div>
+    <div class="table-wrap mt"><table class="data" id="t-metrics"></table></div>
+  </div>
+</div>
+<div class="grid g-2 mt">
+  <div class="card"><div class="card-head"><div><div class="t">Elbow curve (K-Means)</div><div class="d">Inertia for K = 2…15</div></div></div><div id="c-elbow"></div></div>
+  <div class="card"><div class="card-head"><div><div class="t">Silhouette score comparison</div><div class="d">Cosine silhouette for each K (selected K highlighted)</div></div></div><div id="c-sil"></div></div>
+</div>
+<div class="grid g-2 mt">
+  <div class="card"><div class="card-head"><div><div class="t">Postings per month</div><div class="d">2023 publication dates</div></div></div><div id="c-month" class="loading"></div></div>
+  <div class="card"><div class="card-head"><div><div class="t">Schedule type &amp; key facts</div><div class="d">Employment type of the postings</div></div></div><div id="c-sched" class="loading"></div><div id="facts" class="note mt"></div></div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/pages/analytics.js') }}"></script>{% endblock %}

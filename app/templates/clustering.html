@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Job Clustering{% endblock %}
+{% block heading %}Job Clustering{% endblock %}
+{% block subtitle %}K-Means on DistilBERT embeddings. Cluster IDs are discovered groups, not the predefined categories{% endblock %}
+{% block content %}
+<div id="err"></div>
+<div class="grid g-kpi" id="kpis"></div>
+<div class="card mt">
+  <div class="card-head"><div><div class="t">Cluster map (PCA projection of the 768-d embeddings)</div>
+    <div class="d">Each cluster has its own colour <b>and</b> marker shape. Scroll to zoom, drag to pan, click a legend item or a numbered centroid to isolate a cluster.</div></div>
+    <div class="right"><button class="icon-btn" id="reset" title="Reset zoom">{{ icon('fit') }}</button><button class="btn btn-ghost btn-sm" id="all">Show all</button></div></div>
+  <div id="legend" class="mb"></div>
+  <div id="scatter" class="loading" style="min-height:520px"></div>
+  <div class="hint" id="sc-note"></div>
+</div>
+<div class="grid g-side mt">
+  <div class="card" id="detail-card">
+    <div class="card-head"><div><div class="t" id="d-title">Select a cluster</div><div class="d" id="d-sub">Click a cluster card, a legend item or a centroid</div></div></div>
+    <div id="detail"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Discovered clusters</div><div class="d">Automatic labels: dominant category · most distinctive skills (lift)</div></div></div>
+    <div class="grid" style="gap:10px" id="cards"></div>
+  </div>
+</div>
+<div class="grid g-2 mt">
+  <div class="card"><div class="card-head"><div><div class="t">Elbow method</div><div class="d">K-Means inertia vs number of clusters</div></div></div><div id="elbow"></div></div>
+  <div class="card"><div class="card-head"><div><div class="t">Silhouette score (cosine)</div><div class="d" id="sil-sub"></div></div></div><div id="sil"></div></div>
+</div>
+<div class="card mt"><div class="card-head"><div><div class="t">Cluster × job category</div><div class="d">Share of each cluster's ads belonging to each official category (row %). Clusters regroup categories; they do not copy them.</div></div></div><div id="ct"></div></div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/pages/clustering.js') }}"></script>{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Skill Extraction{% endblock %}
+{% block heading %}Skill Extraction{% endblock %}
+{% block subtitle %}Dictionary + rule-based NLP extractor, enriched with dataset statistics, DistilBERT neighbours and graph recommendations{% endblock %}
+{% block content %}
+<div class="grid g-2">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Job description</div><div class="d">Detected skills are highlighted in the text</div></div></div>
+    <label class="field" for="text">Text</label>
+    <textarea id="text" placeholder="Paste a job description…"></textarea>
+    <div class="field-row mt-s">
+      <button class="btn btn-primary" id="go">{{ icon('spark') }} Extract skills</button>
+      <button class="btn btn-ghost" id="example">Example</button>
+      <button class="btn btn-ghost" id="random">{{ icon('shuffle') }} Real ad</button>
+      <button class="btn btn-ghost" id="clear">Clear</button>
+    </div>
+    <div id="msg" class="mt-s"></div>
+    <div id="hl" class="mt"></div>
+    <details class="method"><summary>How does the extractor work?</summary>
+      <p>1) A gazetteer of <b id="n-skills">…</b> canonical skills (the dataset's own technology vocabulary, grouped in 11 categories);
+      2) <b id="n-alias">…</b> aliases normalised to one name (PowerBI → power bi, sklearn → scikit-learn);
+      3) one compiled regular expression, longest match first, with token boundaries that keep <code>c++</code>, <code>c#</code>, <code>node.js</code> intact;
+      4) ambiguity rules: <code>R</code>, <code>C</code>, <code>Go</code>, <code>Word</code>, <code>Spring</code>… only match their case-sensitive technical spelling, and <code>R&amp;D</code> / <code>C-level</code> are rejected.
+      <br><b>Limitations:</b> no deep context understanding ("Excel at teamwork" matches Excel), unseen technologies are missed, and each skill has a single category.</p>
+    </details>
+  </div>
+  <div class="card" id="hl-card">
+    <div class="card-head"><div><div class="t">Detected skills</div><div class="d" id="hl-sub">Grouped by category</div></div></div>
+    <div id="cats">{{ '' }}<div class="empty">{{ icon('spark') }}No text analysed yet.</div></div>
+  </div>
+</div>
+<div class="grid g-2 mt" id="details" style="display:none">
+  <div class="card">
+    <div class="card-head"><div><div class="t">How common are these skills?</div><div class="d">Share of the 564k cleaned postings that list each detected skill</div></div></div>
+    <div id="freq"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Recommended complementary skills</div><div class="d">Personalised PageRank on the skill co-occurrence graph (seeded with the detected skills), ranked by PPR × log-lift</div></div></div>
+    <div id="recs"></div>
+  </div>
+  <div class="card span-2 flush">
+    <div style="padding:18px 22px 6px" class="card-head"><div><div class="t">Skill statistics</div><div class="d">Per detected skill: category, mentions in the text, dataset frequency, the job category that requests it most, and the nearest skills in DistilBERT space</div></div></div>
+    <div class="table-wrap"><table class="data" id="tbl"></table></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/pages/skills.js') }}"></script>{% endblock %}

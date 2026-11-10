@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Job Classification{% endblock %}
+{% block heading %}Job Classification{% endblock %}
+{% block subtitle %}Predict the <code>job_title_short</code> category with the saved TF-IDF + Logistic Regression pipeline{% endblock %}
+{% block content %}
+<div class="grid g-2">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Job advertisement</div><div class="d">Paste a job title, a description, or a title plus a skill list</div></div></div>
+    <label class="field" for="text">Text to classify</label>
+    <textarea id="text" placeholder="e.g. Senior Data Engineer – build streaming pipelines with Spark, Kafka and Airflow on AWS. Strong Python and SQL."></textarea>
+    <div class="field-row mt-s">
+      <button class="btn btn-primary" id="predict">{{ icon('play') }} Predict category</button>
+      <button class="btn btn-ghost" id="random" title="Load a real advertisement from the dataset">{{ icon('shuffle') }} Load a real ad</button>
+      <button class="btn btn-ghost" id="clear">Clear</button>
+      <span class="hint" id="count">0 characters</span>
+    </div>
+    <div class="chips mt-s" id="examples"></div>
+    <div id="form-msg" class="mt-s"></div>
+  </div>
+  <div class="card" id="result-card">
+    <div class="card-head"><div><div class="t">Prediction</div><div class="d">Category, class probabilities and the terms that drove the decision</div></div></div>
+    <div id="result">{{ '' }}<div class="empty">{{ icon('tag') }}Enter a job advertisement and press <b>Predict category</b>.</div></div>
+  </div>
+</div>
+
+<div class="grid g-2 mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Confusion matrix (test set)</div><div class="d">Row-normalised: share of each true category predicted as each column</div></div></div>
+    <div id="cm" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Per-class F1-score</div><div class="d">Main model (title + skills) vs skills-only model</div></div></div>
+    <div id="f1-legend" class="mb"></div>
+    <div id="f1" class="loading"></div>
+    <div id="model-meta" class="note mt"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/pages/classification.js') }}"></script>{% endblock %}

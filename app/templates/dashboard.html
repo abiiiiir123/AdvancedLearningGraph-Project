@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block subtitle %}Overview of the data-job market and of the trained models: real figures computed from the cleaned dataset{% endblock %}
+{% block content %}
+<div id="dash-error"></div>
+<div class="grid g-kpi" id="kpis">
+  {% for i in range(6) %}<div class="card kpi"><div class="skeleton" style="height:14px;width:60%"></div><div class="skeleton" style="height:28px;width:45%;margin-top:8px"></div></div>{% endfor %}
+</div>
+
+<div class="grid g-2 mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Most demanded skills</div><div class="d">Share of postings that list each skill (top 15)</div></div></div>
+    <div id="c-skills" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Job category distribution</div><div class="d">Postings per <code>job_title_short</code> after cleaning</div></div></div>
+    <div id="c-cats" class="loading"></div>
+  </div>
+</div>
+
+<div class="grid g-side mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Clustering overview</div><div class="d">Professional families discovered by K-Means on DistilBERT embeddings. Click a family to explore it.</div></div>
+      <div class="right"><a class="btn btn-ghost btn-sm" href="/clustering">Open clustering</a></div></div>
+    <div id="c-clusters" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Model performance</div><div class="d">Held-out test set / internal metrics</div></div></div>
+    <div id="model-cards" class="loading"></div>
+  </div>
+</div>
+
+<div class="grid g-2 mt">
+  <div class="card">
+    <div class="card-head"><div><div class="t">Postings per month (2023)</div><div class="d">Publication date of the cleaned postings</div></div></div>
+    <div id="c-monthly" class="loading"></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><div class="t">Top countries</div><div class="d">Postings per country (top 10)</div></div></div>
+    <div id="c-countries" class="loading"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>{% endblock %}
